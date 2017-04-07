@@ -63,7 +63,7 @@ def main():
     except Exception, e:
         print "CRITICAL: POP3 Cannot retrieve stat: %s" % e
         
-    M.quit
+    M.quit()
     
     print "OK POP3 Login Successful. N messages: ", numMessages
     return 0
