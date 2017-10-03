@@ -21,8 +21,8 @@ def usage():
     print "-H <host>"
 
 def main():
-	try:
-	    opts, args = getopt.getopt(sys.argv[1:], "u:p:sH:")	
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "u:p:sH:")
     except getopt.GetoptError:
         usage()
         return 3
@@ -46,9 +46,9 @@ def main():
         if use_ssl:
             M = poplib.POP3_SSL(host=host)
         else:
-    	    M = poplib.POP3(host)
+            M = poplib.POP3(host)
     except Exception, e:
-		print "CRITICAL: POP3 Connection not Successful: %s" % e
+        print "CRITICAL: POP3 Connection not Successful: %s" % e
         sys.exit(2)
     
     try:
