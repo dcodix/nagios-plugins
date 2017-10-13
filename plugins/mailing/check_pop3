@@ -3,6 +3,8 @@
 # -*- coding: UTF-8 -*-
 # -*- Mode: Python -*-
 #
+# Latest version available at https://github.com/dcodix/nagios-plugins
+#
 # Copyright (C) 2012 dcodix 
 
 # This file may be distributed and/or modified under the terms of
@@ -12,7 +14,7 @@
 # warranty of merchantability or fitness for a particular purpose.
 # See "LICENSE.GPL" in the source distribution for more information.
 
-import sys, os, poplib, getopt
+import sys, os, poplib, getopt, time
 
 def usage():
     print "-u <user>"
@@ -21,8 +23,8 @@ def usage():
     print "-H <host>"
 
 def main():
-	try:
-	    opts, args = getopt.getopt(sys.argv[1:], "u:p:sH:")	
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "u:p:sH:")
     except getopt.GetoptError:
         usage()
         return 3
@@ -42,14 +44,16 @@ def main():
         usage()
         return 1
     
+    before_connect = time.time()
     try:
         if use_ssl:
             M = poplib.POP3_SSL(host=host)
         else:
-    	    M = poplib.POP3(host)
+            M = poplib.POP3(host)
     except Exception, e:
-		print "CRITICAL: POP3 Connection not Successful: %s" % e
+        print "CRITICAL: POP3 Connection not Successful: %s" % e
         sys.exit(2)
+    connect_time = time.time() - before_connect
     
     try:
         M.user(user)
@@ -65,7 +69,8 @@ def main():
         
     M.quit()
     
-    print "OK POP3 Login Successful. N messages: ", numMessages
+    perfdata = "time=" + str(connect_time) + "s" + " messages=" + str(numMessages)
+    print "OK POP3 Login Successful. N messages: " + str(numMessages) + "|" + perfdata
     return 0
 
 if __name__ == "__main__":
